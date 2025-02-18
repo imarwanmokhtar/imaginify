@@ -140,15 +140,19 @@ export const download = (url: string, filename: string) => {
     .catch((error) => console.log({ error }));
 };
 
+interface ObjectRecord {
+  [key: string]: unknown;
+}
+
 // DEEP MERGE OBJECTS
-export const deepMergeObjects = (obj1: Record<string, any>, obj2: Record<string, any>): Record<string, any> => {
+export const deepMergeObjects = (obj1: ObjectRecord, obj2: ObjectRecord): ObjectRecord => {
   if(obj2 === null || obj2 === undefined) {
     return obj1;
   }
 
-  let output = { ...obj2 };
+  const output = { ...obj2 };
 
-  for (let key in obj1) {
+  for (const key in obj1) {
     if (obj1.hasOwnProperty(key)) {
       if (
         obj1[key] &&
@@ -156,7 +160,10 @@ export const deepMergeObjects = (obj1: Record<string, any>, obj2: Record<string,
         obj2[key] &&
         typeof obj2[key] === "object"
       ) {
-        output[key] = deepMergeObjects(obj1[key], obj2[key]);
+        output[key] = deepMergeObjects(
+          obj1[key] as ObjectRecord,
+          obj2[key] as ObjectRecord
+        );
       } else {
         output[key] = obj1[key];
       }
