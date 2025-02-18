@@ -85,25 +85,19 @@ export function removeKeysFromQuery({
 }
 
 // DEBOUNCE
-export const debounce = <T extends (...args: unknown[]) => void>(func: T, delay: number) => {
+export const debounce = (func: (...args: any[]) => void, delay: number) => {
   let timeoutId: NodeJS.Timeout | null;
-  return (...args: Parameters<T>) => {
+  return (...args: any[]) => {
     if (timeoutId) clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => func(...args), delay);
+    timeoutId = setTimeout(() => func.apply(null, args), delay);
   };
 };
 
 // GE IMAGE SIZE
 export type AspectRatioKey = keyof typeof aspectRatioOptions;
-interface ImageData {
-  aspectRatio?: AspectRatioKey;
-  width?: number;
-  height?: number;
-}
-
 export const getImageSize = (
   type: string,
-  image: ImageData,
+  image: any,
   dimension: "width" | "height"
 ): number => {
   if (type === "fill") {
@@ -137,7 +131,7 @@ export const download = (url: string, filename: string) => {
 };
 
 // DEEP MERGE OBJECTS
-export const deepMergeObjects = <T extends Record<string, unknown>>(obj1: T, obj2: T): T => {
+export const deepMergeObjects = (obj1: any, obj2: any) => {
   if(obj2 === null || obj2 === undefined) {
     return obj1;
   }
