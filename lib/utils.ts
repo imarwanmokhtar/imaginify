@@ -80,7 +80,8 @@ export function removeKeysFromQuery({
   searchParams,
   keysToRemove,
 }: RemoveUrlQueryParams) {
-  const currentUrl = qs.parse(searchParams);
+  const currentUrl = qs.parse(searchParams.toString());
+
 
   keysToRemove.forEach((key) => {
     delete currentUrl[key];
