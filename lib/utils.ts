@@ -85,19 +85,19 @@ export function removeKeysFromQuery({
 }
 
 // DEBOUNCE
-export const debounce = <T extends (...args: unknown[]) => void>(func: T, delay: number) => {
+export const debounce = (func: (...args: any[]) => void, delay: number) => {
   let timeoutId: NodeJS.Timeout | null;
-  return (...args: Parameters<T>) => {
+  return (...args: any[]) => {
     if (timeoutId) clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => func(...args), delay);
+    timeoutId = setTimeout(() => func.apply(null, args), delay);
   };
 };
 
-// GET IMAGE SIZE
+// GE IMAGE SIZE
 export type AspectRatioKey = keyof typeof aspectRatioOptions;
 export const getImageSize = (
   type: string,
-  image: Record<string, unknown>,
+  image: any,
   dimension: "width" | "height"
 ): number => {
   if (type === "fill") {
@@ -106,35 +106,7 @@ export const getImageSize = (
       1000
     );
   }
-  return (image?.[dimension] as number) || 1000;
-};
-
-// DEEP MERGE OBJECTS
-export const deepMergeObjects = (obj1: Record<string, unknown>, obj2: Record<string, unknown>) => {
-  if(obj2 === null || obj2 === undefined) {
-    return obj1;
-  }
-
-  let output = { ...obj2 };
-
-  for (let key in obj1) {
-    if (obj1.hasOwnProperty(key)) {
-      if (
-        obj1[key] &&
-        typeof obj1[key] === "object" &&
-        obj2[key] &&
-        typeof obj2[key] === "object"
-      ) {
-        output[key] = deepMergeObjects(
-          obj1[key] as Record<string, unknown>,
-          obj2[key] as Record<string, unknown>
-        );
-      } else {
-        output[key] = obj1[key];
-      }
-    }
-  }
-  return output;
+  return image?.[dimension] || 1000;
 };
 
 // DOWNLOAD IMAGE
