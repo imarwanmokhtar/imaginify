@@ -13,6 +13,6 @@ export const config = {
     '/(api|trpc)(.*)',
 
     // Exclude /api/webhooks/clerk from Clerk middleware
-    '!/api/webhooks/clerk',
+    '/api/webhooks/clerk', // Corrected: Starts with a '/'
   ],
 };
